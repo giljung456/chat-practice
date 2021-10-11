@@ -3,23 +3,24 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import http from "http";
-import socket from "socket-io";
+import { Server } from "socket.io";
 
 const __dirname = path.resolve();
 const app = express();
 const httpServer = http.createServer(app);
-const io = socket(httpServer);
+const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
   socket.on("login", (nickname) => {
     console.log(`${nickname} connected`);
-    io.emit("login", `${nickname}님이 채팅방에 입장했습니다.`);
+    io.emit("chat", `${nickname}님이 채팅방에 입장했습니다.`);
     socket.nickname = nickname;
   });
 
   socket.on("chat", (msg) => {
     console.log(`${socket.nickname} send msg : ${msg}`);
     socket.broadcast.emit("chat", `${socket.nickname} : ${msg}`);
+    socket.emit("chat", `나 : ${msg}`);
   });
 
   socket.on("forceDisconnect", () => {
