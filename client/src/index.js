@@ -25,12 +25,14 @@ const onLoginSubmitClick = (e) => {
 const onChatSubmitClick = (e) => {
   e.preventDefault();
   const msg = chatInput.value;
+  chatInput.value = "";
   socket.emit("chat", msg);
 };
 
 const onChangeBtnClick = (e) => {
   e.preventDefault();
   const newNickname = nickChangeInput.value;
+  nickChangeInput.value = "";
   socket.emit("nicknameChange", newNickname);
 };
 
