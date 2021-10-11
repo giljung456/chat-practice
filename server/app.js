@@ -20,8 +20,8 @@ io.on("connection", (socket) => {
 
   socket.on("userChat", (msg) => {
     console.log(`${socket.nickname} send msg : ${msg}`);
-    socket.broadcast.emit("userChat", `${socket.nickname} : ${msg}`, chatNum);
-    socket.emit("userChat", `나 : ${msg}`, chatNum);
+    socket.broadcast.emit("userChat", `${socket.nickname} : ${msg}`, false, chatNum);
+    socket.emit("userChat", `나 : ${msg}`, true, chatNum);
     chatNum += 1;
   });
 
@@ -29,6 +29,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("adminChat", `관리자 : ${socket.nickname}님이 닉네임을 ${newNickname}으로 변경하였습니다.`);
     socket.emit("adminChat", `관리자 : 회원님의 닉네임이 ${newNickname}으로 변경되었습니다.`);
     socket.nickname = newNickname;
+  });
+
+  socket.on("deleteMyChat", (chatId) => {
+    socket.broadcast.emit("deleteMyChat", chatId);
   });
 
   socket.on("forceDisconnect", () => {
