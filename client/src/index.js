@@ -10,7 +10,13 @@ const nickChangeSubmit = document.querySelector(".change-submit");
 const chatList = document.querySelector(".chat-list");
 const disconnectBtn = document.querySelector(".disconnect-btn");
 
-const makeChat = (msg) => {
+const makeUserChat = (msg) => {
+  const $li = document.createElement("li");
+  $li.innerText = msg;
+  chatList.appendChild($li);
+};
+
+const makeAdminChat = (msg) => {
   const $li = document.createElement("li");
   $li.innerText = msg;
   chatList.appendChild($li);
@@ -26,7 +32,7 @@ const onChatSubmitClick = (e) => {
   e.preventDefault();
   const msg = chatInput.value;
   chatInput.value = "";
-  socket.emit("chat", msg);
+  socket.emit("userChat", msg);
 };
 
 const onChangeBtnClick = (e) => {
@@ -45,6 +51,10 @@ chatSubmit.addEventListener("click", onChatSubmitClick);
 disconnectBtn.addEventListener("click", onDisconnectBtnClick);
 nickChangeSubmit.addEventListener("click", onChangeBtnClick);
 
-socket.on("chat", (msg) => {
-  makeChat(msg);
+socket.on("userChat", (msg) => {
+  makeUserChat(msg);
+});
+
+socket.on("adminChat", (msg) => {
+  makeAdminChat(msg);
 });
